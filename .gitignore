@@ -1,0 +1,21 @@
+# Python
+*.pyc
+*.pyo
+*.egg-info
+dist/
+build/
+__pycache__/
+
+# Virtual environment
+venv/
+
+# OS-specific
+.DS_Store
+*.swp
+
+# Documents
+documents/
+
+# DB
+chroma.db/
+```
