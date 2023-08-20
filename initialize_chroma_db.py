@@ -67,7 +67,7 @@ def initialize_db():
     notion_columns = ['notion_{}'.format(i) for i in range(1, 9)]
     data_quotes[columns_to_include + notion_columns] = data_quotes[columns_to_include + notion_columns].fillna('').astype(str)
     data_quotes['txt'] = data_quotes[columns_to_include + notion_columns].agg(' '.join, axis=1)
-    data_quotes['notions'] = data_quotes[['notion_{}'.format(i) for i in range(1, 9)]].agg(' '.join, axis=1)
+    data_quotes['notions'] = data_quotes[['notion_{}'.format(i) for i in range(1, 9)]].agg(','.join, axis=1)
     
     documents_quotes = data_quotes['txt'].tolist()
     ids_quotes = ["Z:" + str(idx) for idx in data_quotes["ID"].astype(str)]
