@@ -1,6 +1,6 @@
 # Zettel LLM
 
-**Zettel LLM** leverage LLMs and vector embeddings to automatically assign labels to notes within a zettelkasten system. For a more detailed guide, check out our [Simple Manual](SIMPLE_MANUAL.md).
+**Zettel LLM** leverage LLMs and vector embeddings to automatically assign labels to notes within a zettelkasten system. For a more detailed guide, check out the [Simple Manual](SIMPLE_MANUAL.md).
 
 ## 🛠️ Setup
 
