@@ -6,8 +6,7 @@ import argparse
 DB_PATH = "./chroma.db"
 COLLECTION_NAMES = ["zettelkasten", "notions"]
 
-QUERY_RESULTS = 20
-PRINT_RESULTS = 20
+QUERY_RESULTS = 60
 
 def parse_arguments():
     """Parse command-line arguments."""
@@ -78,6 +77,28 @@ def print_top_n_zettelkasten_results(results, n=2):
         print(f"Notions: {notions}")
         print("="*50)  # print separator for better readability
 
+def get_notions_from_zettelkasten_results(results):
+    """
+    Returns all the notions from a given results dictionary. 
+    Each notion is added to a list.
+    
+    Parameters:
+        results (dict): Dictionary containing the results.
+
+    Returns:
+        list: List of all notions from the results.
+    """
+    
+    notions_list = []
+
+    for entry in results['metadatas'][0]:
+        notions_str = entry['notions']
+        # Extend the main list with non-empty notions
+        notions_list.extend([notion.strip() for notion in notions_str.split(",") if notion.strip()])
+
+    return notions_list
+
+
 def print_top_n_notions_results(results, n=2):
     """
     Prints up to the top n results from the notions results dictionary.
@@ -95,6 +116,23 @@ def print_top_n_notions_results(results, n=2):
 
     print("\n")  # Space for better readability
 
+def get_notions_from_notions_results(results):
+    """
+    Returns all the notions from the provided results dictionary.
+    
+    Parameters:
+        results (dict): Dictionary containing the results.
+
+    Returns:
+        list: List of all notions from the results.
+    """
+    notions_list = []
+
+    for document in results['documents'][0]:
+        notions_list.append(document)
+
+    return notions_list
+
 def main():
     """Main execution function."""
     args = parse_arguments()  # Parse the command line arguments
@@ -109,14 +147,25 @@ def main():
     if chroma_client:
         collections = get_collections(chroma_client, openai_ef)
 
+        merged_results = []
+
         for name, collection in collections.items():
-            print(f"Query results for {name}:")
             results = collection.query(query_texts=[args.query], n_results=QUERY_RESULTS)
 
             if name == "zettelkasten":
-                print_top_n_zettelkasten_results(results, n=PRINT_RESULTS)
+                notions_from_zettelkasten = get_notions_from_zettelkasten_results(results)
+                merged_results.extend(notions_from_zettelkasten)
             elif name == "notions":
-                print_top_n_notions_results(results, n=PRINT_RESULTS)
+                notions_from_notions = get_notions_from_notions_results(results)
+                merged_results.extend(notions_from_notions)
+
+        # Remove duplicates and sort
+        unique_notions = sorted(list(set(merged_results)))
+
+        # Print merged results
+        print("\nMerged Notions:")
+        for notion in unique_notions:
+            print(notion)
 
 if __name__ == "__main__":
     main()
