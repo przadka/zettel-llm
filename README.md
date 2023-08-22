@@ -48,6 +48,14 @@ Run the `initialize_chroma_db.py` script. This will ensure the presence of the '
 python initialize_chroma_db.py
 ```
 
+⚠️ **Note**: If you need to re-initialize the Chroma database, you can delete the existing one by executing the following command:
+
+```bash
+$ rm -rf chroma.db
+```
+
+Initializing a new database incurs a small cost. Always ensure you're aware of any associated expenses before performing this action.
+
 ### 2. Query the Database
 
 Execute the `main.py` script to search for specific texts within the 'zettelkasten' collection.

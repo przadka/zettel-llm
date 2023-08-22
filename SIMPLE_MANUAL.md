@@ -127,6 +127,16 @@ In the `main.py` file, there's a constant named `QUERY_RESULTS`. By default, it 
 2. Locate the line with `QUERY_RESULTS = 60` and change `60` to your desired number.
 3. Save and exit by pressing `Ctrl` + `X`, then press `Y` and `Enter`.
 
+### Re-initializing ChromaDB:
+
+If you need to re-initialize the Chroma database, you can delete the existing one by executing the following command:
+
+```bash
+$ rm -rf chroma.db
+```
+
+Remember that initializing a new database incurs a small cost. Always ensure you're aware of any associated expenses before performing this action.
+
 ### Closing Thoughts
 
 That's it! Now you can query your system with specific texts, and it will return relevant notions from the database. Remember to activate the virtual environment (`workon zettel-llm`) every time you want to use the system.
