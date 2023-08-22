@@ -8,6 +8,28 @@ The **Zettel LLM** system is designed to label notes within a zettelkasten syste
 - Ubuntu Linux operating system.
 - A terminal application (usually pre-installed on Ubuntu).
 
+## Data Files Structure
+
+### notions.csv
+
+- **Location**: `documents/notions.csv`
+- **Purpose**: This file contains the notions that the system will embed and use.
+- **Expected Columns**:
+  - `Notions`: Contains the textual content of the notion.
+
+### train_data.csv
+
+- **Location**: `documents/train_data.csv`
+- **Purpose**: Contains the quotes, associated metadata, and notions.
+- **Expected Columns**:
+  - `author(s)`: The author(s) of the quote.
+  - `title of the source`: Title of the source from where the quote is taken.
+  - `type of the source`: The type or category of the source (e.g., book, article, etc.).
+  - `quotation`: The actual quote text.
+  - `notion_1` to `notion_8`: Notions associated with the quote. The system supports up to 8 notions per quote.
+
+Ensure all required columns are present. Missing data should be represented as empty strings.
+
 ## Step-by-step Setup and Usage
 
 ### Step 1: Preparation

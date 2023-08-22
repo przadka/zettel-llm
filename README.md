@@ -29,6 +29,15 @@
    - Place your documents in the `documents` directory.
    - Currently, the system assumes documents are in CSV format.
 
+## 💾 Data Setup
+
+Ensure you have the following CSV files in the `documents/` directory:
+
+1. `notions.csv`: Contains the notions that the system will embed.
+2. `train_data.csv`: Contains the quotes and associated metadata.
+
+For details on the expected structure of these CSV files, please refer to the [Simple Manual](SIMPLE_MANUAL.md).
+
 ## 🚀 Usage
 
 ### 1. Initialize ChromaDB
