@@ -19,3 +19,4 @@ documents/
 # DB
 chroma.db/
 ```
+.env
