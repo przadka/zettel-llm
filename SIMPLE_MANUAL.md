@@ -92,9 +92,9 @@ Ensure all required columns are present. Missing data should be represented as e
    ```
    Replace `YOUR_API_KEY` with the API key you received.
    
-2. Reload the bashrc file for the changes to take effect:
+2. Activate the virtual environment again:
    ```bash
-   source ~/.bashrc
+   workon zettel-llm
    ```
 
 ### Step 6: Prepare Your Documents
