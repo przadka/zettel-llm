@@ -137,6 +137,23 @@ $ rm -rf chroma.db
 
 Remember that initializing a new database incurs a small cost. Always ensure you're aware of any associated expenses before performing this action.
 
+### Update the Codebase
+
+1. Before updating the codebase, ensure you are in the correct directory:
+   ```bash
+   cd zettel-llm
+   ```
+
+2. Pull the latest updates from the repository:
+   ```bash
+   git pull
+   ```
+
+3. After pulling the latest changes, ensure all new dependencies are installed:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
 ### Closing Thoughts
 
 That's it! Now you can query your system with specific texts, and it will return relevant notions from the database. Remember to activate the virtual environment (`workon zettel-llm`) every time you want to use the system.
