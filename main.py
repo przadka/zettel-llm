@@ -6,7 +6,7 @@ import argparse
 DB_PATH = "./chroma.db"
 COLLECTION_NAMES = ["zettelkasten", "notions"]
 
-QUERY_RESULTS = 60
+QUERY_RESULTS = 20
 
 def parse_arguments():
     """Parse command-line arguments."""
@@ -62,20 +62,26 @@ def print_top_n_zettelkasten_results(results, n=2):
         results (dict): Dictionary containing the results.
         n (int): Number of top results to print. Default is 2.
     """
-    
+    print("Zettelkasten Results:")
+    print("=" * 60)  # Heading separator
     for i in range(min(n, len(results['metadatas'][0]))):
         authors = results['metadatas'][0][i]['author(s)']
         title = results['metadatas'][0][i]['title of the source']
         notions = results['metadatas'][0][i]['notions']
         quote_start = len(authors) + len(title) + 2
         document = results['documents'][0][i]
+        distance = results['distances'][0][i]
+
         quote = document[quote_start:300]
 
         print(f"Author(s): {authors}")
         print(f"Title: {title}")
         print(f"Quote: {quote}")
+        print(f"Distance: {distance}")
         print(f"Notions: {notions}")
         print("="*50)  # print separator for better readability
+    
+    print("\n")  # Space for better readability
 
 def get_notions_from_zettelkasten_results(results):
     """
@@ -93,9 +99,8 @@ def get_notions_from_zettelkasten_results(results):
 
     for entry in results['metadatas'][0]:
         notions_str = entry['notions']
-        # Extend the main list with non-empty notions
         notions_list.extend([notion.strip() for notion in notions_str.split(",") if notion.strip()])
-
+    
     return notions_list
 
 
@@ -112,7 +117,9 @@ def print_top_n_notions_results(results, n=2):
     
     for i in range(min(n, len(results['documents'][0]))):
         notion = results['documents'][0][i]
+        distance = results['distances'][0][i]
         print(f"{notion}")
+        print(f"Distance: {distance}")
 
     print("\n")  # Space for better readability
 
@@ -126,11 +133,7 @@ def get_notions_from_notions_results(results):
     Returns:
         list: List of all notions from the results.
     """
-    notions_list = []
-
-    for document in results['documents'][0]:
-        notions_list.append(document)
-
+    notions_list = [document for document in results['documents'][0]]
     return notions_list
 
 def main():
@@ -147,24 +150,32 @@ def main():
     if chroma_client:
         collections = get_collections(chroma_client, openai_ef)
 
-        merged_results = []
+        all_notions = []
 
         for name, collection in collections.items():
             results = collection.query(query_texts=[args.query], n_results=QUERY_RESULTS)
-
             if name == "zettelkasten":
                 notions_from_zettelkasten = get_notions_from_zettelkasten_results(results)
-                merged_results.extend(notions_from_zettelkasten)
+                print_top_n_zettelkasten_results(results,n=QUERY_RESULTS)
+                all_notions.extend(notions_from_zettelkasten)
             elif name == "notions":
                 notions_from_notions = get_notions_from_notions_results(results)
-                merged_results.extend(notions_from_notions)
+                print_top_n_notions_results(results, n=QUERY_RESULTS)
+                all_notions.extend(notions_from_notions)
 
-        # Remove duplicates and sort
-        unique_notions = sorted(list(set(merged_results)))
+        # Since the results from collection.query() are sorted by relevance, 
+        # the order of all_notions already represents this relevance. 
+        # We only need to get unique values while preserving the order.
+
+        unique_notions_ordered_by_relevance = []
+
+        for notion in all_notions:
+            if notion not in unique_notions_ordered_by_relevance:
+                unique_notions_ordered_by_relevance.append(notion)
 
         # Print merged results
-        print("\nMerged Notions:")
-        for notion in unique_notions:
+        print("Merged Notions:")
+        for notion in unique_notions_ordered_by_relevance:
             print(notion)
 
 if __name__ == "__main__":
