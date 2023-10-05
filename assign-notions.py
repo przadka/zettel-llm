@@ -40,25 +40,21 @@ def assign_notions(author, title, quote, allowed_labels):
 
     # Construct the user message
     user_msg = f'''
-    Here is a new quote you need to assign labels to:
-
-    ===
-    Author: {author}
-    Title: "{title}"
-    Quote: "{quote}"
-
-    ===
-    List of possible labels have been narrowed down to, and they are sorted by relevance:
-
-    ===
-    {allowed_labels_str}
-    ===
-
-    Please assign labels to the new quote. Try to assign as few labels as possible, 
-    preferably one, two or three. Use only the labels from the list above. 
-    Output only the labels, nothing else. 
-    Sort labels from the most relevant to the least relevant.
-    '''
+Here is a new quote you need to assign labels to:
+===
+Author: {author}
+Title: "{title}"
+Quote: "{quote}"
+===
+List of possible labels have been narrowed down to, and they are sorted by relevance:
+===
+{allowed_labels_str}
+===
+Please assign labels to the new quote. Try to assign as few labels as possible, 
+preferably one, two or three. Use only the labels from the list above. 
+Output only the labels, nothing else. 
+Sort labels from the most relevant to the least relevant.
+'''
 
     print(f"System message: {SYSTEM_MSG}")
     print(f"User message: {user_msg}")
