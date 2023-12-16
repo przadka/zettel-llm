@@ -103,7 +103,7 @@ def main():
         time.sleep(SLEEP_INTERVAL)
 
     # Save the dataframe with assigned labels back to a new CSV
-    df.to_csv("queries_with_keywords.csv", index=False)
+    df.to_csv("queries.csv", index=False)
 
 
 
