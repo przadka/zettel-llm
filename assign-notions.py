@@ -2,6 +2,7 @@ import os
 import openai
 import pandas as pd
 import time
+import ast
 
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -10,7 +11,7 @@ REQUESTS_PER_MINUTE = 10
 SLEEP_INTERVAL = 60.0 / REQUESTS_PER_MINUTE
 
 SYSTEM_MSG = '''
-Assistant is a superhuman zettelkasten maintainer tasked with assigning keywords to zettels. This zettelkasten system is related to philosophy and it is going to be used by philosophers.
+Assistant is a superhuman zettelkasten maintainer tasked with assigning keywords to zettels. This zettelkasten system covers a wide range of topics and is used by philosophers.
 
 Example 1: 
 ===
@@ -31,11 +32,12 @@ Keywords assigned: mind and body
 ===
 '''
 
-def assign_notions(author, title, quote, allowed_notions):
-    """Assign new notions using OpenAI."""
+def assign_keywords(author, title, quote, allowed_keywords):
+    """Assign new keywords using OpenAI."""
     
-    allowed_notions_str = '\n'.join(allowed_notions)
-
+    # Constructing the allowed_keywords string without special characters
+    allowed_keywords_str = "\n".join(allowed_keywords)
+    print(allowed_keywords_str)
     # Construct the user message
     user_msg = f'''
 Here is a new quote you need to assign keywords to:
@@ -48,7 +50,7 @@ Quote: "{quote}"
 Possible keywords have been narrowed down to the following list, and they are sorted by relevance:
 
 ===
-{allowed_notions_str}
+{allowed_keywords_str}
 ===
 
 Please assign keywords to the new quote. Use only the keywords from the list above. Assign between one and three keywords, separated by commas. Output only the keywords, nothing else. Sort keywords from the most relevant to the least relevant.
@@ -61,7 +63,7 @@ Thank you in advance!
 
     try:
         response = openai.ChatCompletion.create(
-            model='gpt-4',
+            model='gpt-4-1106-preview',
             messages=[
                 {"role": "system", "content": SYSTEM_MSG},
                 {"role": "user", "content": user_msg}
@@ -74,7 +76,6 @@ Thank you in advance!
     except openai.error.InvalidRequestError as e:
         print(f"Error while processing the request: {e}")
         return "ERROR_TRIGGERED_CONTENT_MANAGEMENT_POLICY"
-
 
 
 def main():
@@ -90,9 +91,9 @@ def main():
         author = row["author(s)"]
         title = row["title of the source"]
         quote = row["quotation"]
-        allowed_keywords = [label.strip() for label in row["Merged Notions"].split(",")]
+        allowed_keywords = ast.literal_eval(row["Merged Notions"])
         print(f"Allowed keywords: {allowed_keywords}")
-        assigned_keywords = assign_notions(author, title, quote, allowed_keywords)
+        assigned_keywords = assign_keywords(author, title, quote, allowed_keywords)
         print(f"Assigned keywords: {assigned_keywords}")
         # write assigned keywords to the dataframe, under the column "Assigned Keywords"
         df.at[index, "Assigned Keywords"] = assigned_keywords
