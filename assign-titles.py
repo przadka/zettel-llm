@@ -40,6 +40,7 @@ def assign_title(author, source, quote):
     # Construct the user message
     user_msg = f'''
 Here is a new note you need to assign title to:
+
 ===
 Author: {author}
 Source: "{source}"
