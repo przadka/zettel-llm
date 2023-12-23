@@ -44,8 +44,6 @@ Title: "{title}"
 Quote: "{quote}"
 ===
 
-Possible keywords have been narrowed down to the following list, and they are sorted by relevance:
-
 Possible keywords are:
 
 ===
