@@ -37,7 +37,6 @@ def assign_keywords(author, title, quote, allowed_keywords):
     
     # Constructing the allowed_keywords string without special characters
     allowed_keywords_str = "\n".join(allowed_keywords)
-    print(allowed_keywords_str)
     # Construct the user message
     user_msg = f'''
 Here is a new quote you need to assign keywords to:
@@ -58,7 +57,7 @@ Please assign keywords to the new quote. Use only the keywords from the list abo
 Thank you in advance!
 '''
 
-    # print(f"System message: {SYSTEM_MSG}")
+    print(f"System message: {SYSTEM_MSG}")
     print(f"User message: {user_msg}")
 
     try:
@@ -87,12 +86,11 @@ def main():
     df["Assigned Keywords"] = ""
 
     for index, row in df.iterrows():
-        print(f"Processing row {index}...")
+        print(f"Processing row {index}...\n")
         author = row["author(s)"]
         title = row["title of the source"]
         quote = row["quotation"]
         allowed_keywords = ast.literal_eval(row["Merged Notions"])
-        print(f"Allowed keywords: {allowed_keywords}")
         assigned_keywords = assign_keywords(author, title, quote, allowed_keywords)
         print(f"Assigned keywords: {assigned_keywords}")
         # write assigned keywords to the dataframe, under the column "Assigned Keywords"
