@@ -6,7 +6,7 @@ import argparse
 DB_PATH = "./chroma.db"
 COLLECTION_NAMES = ["zettelkasten", "notions"]
 
-QUERY_RESULTS = 20
+QUERY_RESULTS = 30
 
 def parse_arguments():
     """Parse command-line arguments."""
@@ -36,10 +36,10 @@ def get_chroma_client(db_path):
     collection_names = [collection.name for collection in chroma_client.list_collections()]
 
     if all(collection in collection_names for collection in COLLECTION_NAMES):
-        print(f"Database and collections already exist, connecting to it...")
+        print(f"\nDatabase and collections already exist, connecting to it...\n\n")
         return chroma_client
     else:
-        print(f"Database or collections do not exist, please initialize first.")
+        print(f"\nDatabase or collections do not exist, please initialize first.\n\n")
         return None
 
 def get_collections(client, embedding_function):
@@ -71,7 +71,8 @@ def print_top_n_zettelkasten_results(results, n=2):
         quote_start = len(authors) + len(title) + 2
         document = results['documents'][0][i]
         distance = results['distances'][0][i]
-
+        # split notions by , and strip each notion
+        notions = [notion.strip() for notion in notions.split(",") if notion.strip()]
         quote = document[quote_start:300]
 
         print(f"Author(s): {authors}")
@@ -173,8 +174,9 @@ def main():
             if notion not in unique_notions_ordered_by_relevance:
                 unique_notions_ordered_by_relevance.append(notion)
 
-        # Print merged results
-        print("Merged Notions:")
+        # Print relevant results
+        print("Relevant Notions:")
+        print("=" * 60)
         for notion in unique_notions_ordered_by_relevance:
             print(notion)
 
